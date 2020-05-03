@@ -1,2 +1,4 @@
 # leetcode-repo
-A code repo for my leetcode coding
+这个库是一个记录我在leet-code刷题的代码的库
+
+按照题目标签和难度进行了文件夹分类，题目内容也在每份代码的注释里。
