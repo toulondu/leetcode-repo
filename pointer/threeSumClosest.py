@@ -25,13 +25,14 @@ class Solution:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         n = len(nums)
         nums.sort()
-        minDiff = sys.maxint
+        minDiff = abs(3*(nums[n-1])) + abs(target) + 1
+        res = 0
 
         for firstIdx in range(n):
             first = nums[firstIdx]
 
-            # 第一个数大于最小差值/3，直接结束循环
-            if first > minDiff / 3:
+            # # 第一个数大于最小差值/3，直接结束循环
+            if first*3 - target > minDiff:
                 break
 
             # 等于上一个数，已经算过，直接跳过
@@ -41,11 +42,27 @@ class Solution:
             # 指向第三个数的指针从最后一位开始
             thridIdx = n - 1
             subs = target - first
-
             for secondIdx in range(firstIdx+1, n):
                 second = nums[secondIdx]
 
                 if secondIdx > firstIdx+1 and second == nums[secondIdx-1]:
                     continue
 
-                while subs - second+nums[thridIdx] > 0:
+                if secondIdx >= thridIdx:
+                    break
+
+                while secondIdx < thridIdx-1 and subs - second - nums[thridIdx] < 0:
+                    thridIdx -= 1
+
+                if abs(subs - second - nums[thridIdx]) < minDiff:
+                    minDiff = abs(subs - second - nums[thridIdx])
+                    res = first + second + nums[thridIdx]
+                if thridIdx+1 < n and abs(subs - second - nums[thridIdx+1]) < minDiff:
+                    minDiff = abs(subs - second - nums[thridIdx+1])
+                    res = first + second + nums[thridIdx+1]
+
+        return res
+
+
+s = Solution()
+print(s.threeSumClosest([1, 2, 4, 8, 16, 32, 64, 128], 82))
