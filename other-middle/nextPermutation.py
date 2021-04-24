@@ -34,12 +34,25 @@ from typing import List
 
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
-        """
-        Do not return anything, modify nums in-place instead.
-        """
-        for i in range(len(nums)-1, -1, -1):
-            print(i)
+        # 反序遍历
+        for i in range(len(nums)-1, 0, -1):
+            # 找到第一个后面数字大雨前面数字的位置
+            if nums[i] > nums[i-1]:
+                # 交换两者位置
+                # 这里错了一次，这里需要找到后面大于nums[i-1]的最小数
+                j = len(nums)-1
+                while nums[i-1] >= nums[j]:
+                    j-=1
+                temp = nums[i-1]
+                nums[i-1] = nums[j]
+                nums[j] = temp
+                # 再以此为界限，把后面的部分反序
+                nums[i:] = nums[i:][::-1]
+                return nums
+
+        nums.reverse()
+        return nums
 
 
 s = Solution()
-s.nextPermutation([1, 2, 3, 4, 5, 6])
+print(s.nextPermutation([2]))
