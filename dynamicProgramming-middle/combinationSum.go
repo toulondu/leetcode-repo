@@ -6,7 +6,7 @@
 // 说明：
 
 // 所有数字（包括 target）都是正整数。
-// 解集不能包含重复的组合。 
+// 解集不能包含重复的组合。
 // 示例 1：
 
 // 输入：candidates = [2,3,6,7], target = 7,
@@ -24,7 +24,6 @@
 //   [2,3,3],
 //   [3,5]
 // ]
- 
 
 // 提示：
 
@@ -35,32 +34,45 @@
 
 package main
 
-import(
+import (
+	"fmt"
 	"sort"
 )
 
+// 通过枚举法，对所有可能性进行遍历。
+// 枚举的顺序是 一条路走到黑，发现黑之后，退一步，再向前尝试没走过的路。直到所有路都试过。
 func combinationSum(candidates []int, target int) [][]int {
-	sort.Ints(candidate)
+	sort.Ints(candidates)
 	// 回溯遍历
-	res:= [][]int
-	length:= len(candidates)
+	res := [][]int{}
+	length := len(candidates)
 
-	func calcSum(idx int, curSum int, current int[]){
-		if curSum > target{
+	var calcSum func(idx int, curSum int, current []int)
+
+	calcSum = func(idx int, curSum int, current []int) {
+		if curSum > target {
 			return
 		}
-		if curSum == target{
-			res.append(current)
+		if curSum == target {
+			res = append(res, append([]int(nil), current...))
 			return
 		}
 		// 还不到target
-		for i = idx;i<length-1;i++{
-			if curSum + candidates[idx] > target{
+		for i := idx; i < length; i++ {
+			if curSum+candidates[idx] > target {
 				break
 			}
+			calcSum(i, curSum+candidates[i], append(current, candidates[i]))
 		}
 	}
-		
-	
+
+	for idx, _ := range candidates {
+		calcSum(idx, candidates[idx], []int{candidates[idx]})
+	}
+	return res
 }
 
+func main() {
+	candis := []int{2, 3, 5}
+	fmt.Println(combinationSum(candis, 8))
+}
