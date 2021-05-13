@@ -29,7 +29,9 @@ func subsets(nums []int) [][]int {
 	for _, num := range nums {
 		addon := [][]int{}
 		for _, item := range res {
-			addon = append(addon, append(item, num))
+			// 这里需要把item中的值打到一个新切片中
+			// 防止go在空间足够时进行append没有切换底层数组
+			addon = append(addon, append(append([]int(nil), item...), num))
 		}
 		res = append(res, addon...)
 	}
