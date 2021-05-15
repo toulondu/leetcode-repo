@@ -35,17 +35,17 @@ package main
 
 import "fmt"
 
+// 顺时针转90度，稍微在本子上画一下，可以得到转换公式：
+// 维度为m，那么matrix[a][b]旋转后，坐标为
+// a,b -> b,m-1-a
+// 反之，旋转之后，位置x,y上应该为旋转前的m-1-y,x位置的值
 func rotate(matrix [][]int) {
-	// 顺时针转90度，稍微在本子上画一下，可以得到转换公式：
-	// 维度为m，那么matrix[a][b]旋转后，坐标为
-	// a,b -> b,m-1-a
-	// 反之，旋转之后，位置x,y上应该为旋转前的m-1-y,x位置的值
-
 	m := len(matrix)
 	for floor := 0; floor < (m+1)/2; floor++ {
 		for idx, num := range matrix[floor][floor : floor+m-(2*floor)-1] {
 			a := floor
-			b := idx
+			// 这里加上floor才是正确的纵轴开始坐标
+			b := floor + idx
 			for i := 0; i < 3; i++ {
 				matrix[a][b] = matrix[m-1-b][a]
 				a, b = m-1-b, a
