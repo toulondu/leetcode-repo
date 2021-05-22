@@ -16,6 +16,8 @@
 */
 package main
 
+import "fmt"
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -23,9 +25,33 @@ type TreeNode struct {
 }
 
 func diameterOfBinaryTree(root *TreeNode) int {
+	var maxDiameter int
 	var dfs func(node *TreeNode) int
 
 	dfs = func(node *TreeNode) int {
-
+		if node == nil {
+			return 0
+		} else {
+			leftDeep := dfs(node.Left)
+			rightDeep := dfs(node.Right)
+			if leftDeep+rightDeep > maxDiameter {
+				maxDiameter = leftDeep + rightDeep
+			}
+			return max(leftDeep, rightDeep) + 1
+		}
 	}
+	dfs(root)
+	return maxDiameter
+}
+
+func max(a int, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func main() {
+	data := &TreeNode{1, &TreeNode{2, &TreeNode{4, nil, nil}, &TreeNode{5, &TreeNode{6, nil, &TreeNode{7, nil, nil}}, nil}}, &TreeNode{3, nil, nil}}
+	fmt.Println(diameterOfBinaryTree(data))
 }
